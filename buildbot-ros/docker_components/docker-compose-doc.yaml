@@ -1,0 +1,9 @@
+version: '3'
+services:
+  scalable-debian:
+    build:
+      args:
+      - LOCAL_URL=172.17.0.1:49161
+      context: .
+      dockerfile: Dockerfile_doc
+    image: scalable-doc:latest

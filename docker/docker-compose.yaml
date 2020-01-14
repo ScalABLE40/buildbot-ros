@@ -1,0 +1,55 @@
+version: '3'
+volumes:
+  deb_repository:
+  local_mirrors:
+services:
+  buildbot:
+    container_name: buildbot_master
+    build:
+      context: .
+      dockerfile: Dockerfile_bb_master
+    image: buildbot-ros:latest
+    command: bash /root/start_master.sh
+    env_file:
+      - db.env
+    environment:
+      - BUILDBOT_WORKER_NAME=${BUILDBOT_WORKER_NAME}
+      - BUILDBOT_WORKER_PASS=${BUILDBOT_WORKER_PASS}
+      - BUILDBOT_WEB_URL=${BUILDBOT_WEB_URL}
+      - BUILDBOT_WEB_PORT=${BUILDBOT_WEB_PORT}
+      - BUILDBOT_PRIVATE_INDEX=${BUILDBOT_PRIVATE_INDEX}
+      - BUILDBOT_WORKER_PORT=${BUILDBOT_WORKER_PORT}
+      - BUILDBOT_ROSINSTALL_INDEX=${BUILDBOT_ROSINSTALL_INDEX}
+    links:
+      - db
+    depends_on:
+      - db
+    ports:
+      - "8010:8010"
+  db:
+    container_name: db
+    env_file:
+      - db.env
+    image: "postgres:9.4"
+    expose:
+      - 5432
+
+  worker:
+    container_name: ${BUILDBOT_WORKER_NAME}
+    build:
+      context: .
+      dockerfile: Dockerfile_bb_worker
+    image: buildbot-worker:0.0.3
+    command: bash /buildbot/start_worker.sh
+    environment:
+      BUILDMASTER: buildbot
+      BUILDMASTER_PORT: ${BUILDBOT_WORKER_PORT}
+      WORKERNAME: ${BUILDBOT_WORKER_NAME}
+      WORKERPASS: ${BUILDBOT_WORKER_PASS}
+      WORKER_ENVIRONMENT_BLACKLIST: DOCKER_BUILDBOT* BUILDBOT_ENV_* BUILDBOT_1* WORKER_ENVIRONMENT_BLACKLIST
+      SINGING_KEY: ${SINGING_KEY}
+      LOCAL_RESPOSITORY: ${LOCAL_RESPOSITORY}
+    volumes:
+       - /var/run/docker.sock:/var/run/docker.sock
+    links:
+      - buildbot

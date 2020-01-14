@@ -1,0 +1,20 @@
+From ros:kinetic-ros-core-xenial
+RUN apt-get update && apt-get -y upgrade && apt-get install -y \
+   	ros-kinetic-ros-base \
+	git \
+    python-pip \
+    python-rosdistro \
+    python-catkin-pkg \
+    apt-utils
+RUN pip install --upgrade pip
+# add private rosdep
+#ADD ./docker_components/rosdep_private.yaml /home/rosdep/private.yaml
+#RUN sh -c 'echo "yaml file:///home/rosdep/private.yaml" >> /etc/ros/rosdep/sources.list.d/20-default.list'
+RUN sh -c 'echo "yaml file:///home/package/private.yaml" >> /etc/ros/rosdep/sources.list.d/20-default.list'
+# local repository gpg key
+# RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 28143562B0A851DD
+RUN apt-get update
+RUN apt-get -y upgrade
+RUN rosdep db
+# building folder
+RUN mkdir -p /tmp/build/

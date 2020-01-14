@@ -1,0 +1,281 @@
+%YAML 1.1
+# ROS distribution file
+# see REP 141: http://ros.org/reps/rep-0141.html
+---
+release_platforms:
+  ubuntu:
+  - xenial
+repositories:
+  iiwa_stack:
+    doc:
+      type: git
+      url: git@github.com:ScalABLE40/iiwa_stack.git
+      version: master
+    release:
+      packages:
+      - iiwa_control
+      - iiwa_description
+      - iiwa_gazebo
+      - iiwa_hw
+      - iiwa_moveit
+      - iiwa_msgs
+      - iiwa_ros
+      tags:
+        release: release/kinetic/{package}/{version}
+      url: git@github.com:ipa-rwu/iiwa_stack-release.git
+      version: 1.4.1-1
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/iiwa_stack.git
+      version: master
+    status: developed
+  low_level_logics:
+    release:
+      packages:
+      - low_level_logics
+      tags:
+        release: release/kinetic/{package}/{version}
+      url: git@github.com:ScalABLE40/low_level_logics-release.git
+      version: 1.0.0-1
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/low_level_logics.git
+      version: master
+    status: developed
+  osps_msgs:
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/osps_msgs.git
+      version: master
+    status: developed
+  outcome_skill:
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/outcome_skill.git
+      version: master
+    status: developed
+  path_assigner:
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/path_assigner.git
+      version: master
+    status: developed
+  qt_smach_viewer:
+    release:
+      packages:
+      - qt_smach_viewer
+      tags:
+        release: release/kinetic/{package}/{version}
+      url: git@github.com:ipa-led/qt_smach_viewer-release.git
+      version: 0.0.3-0
+    source:
+      type: git
+      url: git@github.com:ipa-led/qt_smach_viewer.git
+      version: master
+    status: developed
+  random_outcome_skill:
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/random_outcome_skill.git
+      version: master
+    status: developed
+  scalable_launch:
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/scalable_launch.git
+      version: master
+    status: developed
+  scalable_navigation_config:
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/scalable_navigation_config.git
+      version: master
+    status: developed
+  scalable_robot:
+    release:
+      packages:
+      - scalable_robot
+      - sr_control
+      - sr_description
+      - sr_gazebo
+      - sr_moveit
+      tags:
+        release: release/kinetic/{package}/{version}
+      url: git@github.com:ScalABLE40/scalable_robot-release.git
+      version: 1.0.1-1
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/scalable_robot.git
+      version: master
+    status: developed
+  scalable_skills_aau:
+    release:
+      packages:
+      - moveit_linear_motion
+      - scalable_skills_aau
+      tags:
+        release: release/kinetic/{package}/{version}
+      url: git@github.com:ScalABLE40/scalable_skills_aau-release.git
+      version: 1.0.1-1
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/scalable_skills_aau.git
+      version: master
+    status: developed
+  scalable_skills_common:
+    release:
+      packages:
+      - scalable_skills_common
+      tags:
+        release: release/kinetic/{package}/{version}
+      url: git@github.com:ScalABLE40/scalable_skills_common-release.git
+      version: 1.0.1-1
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/scalable_skills_common.git
+      version: master
+    status: developed
+  scalable_tests:
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/scalable_tests.git
+      version: master
+    status: developed
+  scxml_interpreter:
+    release:
+      packages:
+      - scxml_interpreter
+      tags:
+        release: release/kinetic/{package}/{version}
+      url: git@github.com:ScalABLE40/scxml_interpreter-release.git
+      version: 1.0.0-0
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/scxml_interpreter.git
+      version: master
+    status: developed
+  skill_generator:
+      source:
+        type: git
+        url: git@github.com:ScalABLE40/skill_generator.git
+        version: master
+      status: developed
+  skiros2:
+    release:
+      packages:
+      - skiros2
+      - skiros2_common
+      - skiros2_gui
+      - skiros2_msgs
+      - skiros2_skill
+      - skiros2_task
+      - skiros2_world_model
+      tags:
+        release: release/kinetic/{package}/{version}
+      url: git@github.com:ScalABLE40/skiros2-release.git
+      version: 1.0.1-1
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/skiros2.git
+      version: master
+    status: developed
+  skiros2_inesc_lib:
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/skiros2_inesc_lib.git
+      version: master
+    status: developed
+  skiros2_scalable_interface:
+    release:
+      packages:
+      - skiros2_scalable_interface
+      tags:
+        release: release/kinetic/{package}/{version}
+      url: git@github.com:ScalABLE40/skiros2_scalable_interface-release.git
+      version: 1.0.0-2
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/skiros2_scalable_interface.git
+      version: master
+    status: developed
+  skiros2_std_lib:
+    release:
+      packages:
+      - skiros2_std_reasoners
+      - skiros2_std_skills
+      tags:
+        release: release/kinetic/{package}/{version}
+      url: git@github.com:ScalABLE40/skiros2_std_lib-release.git
+      version: 1.0.2-1
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/skiros2_std_lib.git
+      version: master
+    status: developed
+  skiros2_template_lib:
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/skiros2_template_lib.git
+      version: master
+    status: developed
+  skiros2_test_lib:
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/skiros2_test_lib.git
+      version: master
+    status: developed
+  task_manager_stack:
+    release:
+      packages:
+      - task_manager
+      - task_manager_common
+      - task_manager_heart_beep
+      - task_manager_pseudo_pm
+      - task_manager_robot_map
+      - task_manager_robot_profile
+      - task_manager_server
+      tags:
+        release: release/kinetic/{package}/{version}
+      url: git@github.com:ScalABLE40/task_manager_stack-release.git
+      version: 1.3.0-2
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/task_manager_stack.git
+      version: master
+    status: developed
+  vfk_msb_client:
+    release:
+      packages:
+      - vfk_msb_client
+      tags:
+        release: release/kinetic/{package}/{version}
+      url: git@github.com:ScalABLE40/vfk_msb_client-release.git
+      version: 1.5.8-1
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/vfk_msb_client.git
+      version: 1.5.7
+    status: developed
+  wait_skill:
+    release:
+      packages:
+      - wait_skill_client
+      - wait_skill_msgs
+      - wait_skill_server
+      tags:
+        release: release/kinetic/{package}/{version}
+      url: git@github.com:ipa-rwu/wait_skill-release.git
+      version: 1.0.1-1
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/wait_skill.git
+      version: master
+    status: developed
+  wsg50_ros-pkg:
+    source:
+      type: git
+      url: git@github.com:ScalABLE40/wsg50-ros-pkg.git
+      version: master
+    status: developed
+type: distribution
+version: 1

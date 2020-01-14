@@ -1,0 +1,14 @@
+version: '3'
+volumes:
+  deb_repository:
+services:
+  scalable-test:
+    build:
+      args:
+        LOCAL_RESPOSITORY: 172.17.0.1:49161
+        SINGING_KEY: 
+      context: .
+      dockerfile: Dockerfile_unique
+    volumes:
+      - deb_repository:/home/package
+    image: scalable-base:latest

@@ -1,0 +1,19 @@
+From ros:kinetic-ros-core-xenial
+RUN apt-get update && apt-get install -y \
+   	ros-kinetic-ros-base \
+	git \
+	python-pip \
+	python-catkin-tools \
+	apt-utils
+RUN sh -c 'echo "yaml file:///home/package/private.yaml" >> /etc/ros/rosdep/sources.list.d/20-default.list'
+RUN mkdir -p /tmp/scalable_ws
+RUN pip install --upgrade pip
+RUN apt-get update
+RUN apt-get -y upgrade
+ADD ./shell/test_sys.sh /usr/local/sbin/test_sys.sh
+#CMD ["/usr/local/sbin/test_sys"]
+#ARG LOCAL_URL
+#RUN sh -c 'echo "deb http://$LOCAL_URL/ xenial main" >> /etc/apt/sources.list'
+#COPY ./scalable_ws /tmp/scalable_ws
+#ARG RELOCALKEY
+#RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $RELOCALKEY

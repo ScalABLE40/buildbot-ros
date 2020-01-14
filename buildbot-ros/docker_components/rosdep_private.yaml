@@ -1,0 +1,70 @@
+python-iso8601-pip:
+  ubuntu:
+    pip:
+      packages: [iso8601]
+low_level_logics:
+  ubuntu: ros-kinetic-low-level-logics
+moveit_linear_motion:
+  ubuntu: ros-kinetic-moveit-linear-motion
+osps_msgs:
+  ubuntu: ros-kinetic-osps-msgs
+qt_smach_viewer:
+  ubuntu: ros-kinetic-qt-smach-viewer
+scalable_skills_aau:
+  ubuntu: ros-kinetic-scalable-skills-aau
+scalable_skills_common:
+  ubuntu: ros-kinetic-scalable-skills-common
+scalable_robot:
+  ubuntu: ros-kinetic-scalable-robot
+scxml_interpreter:
+  ubuntu: ros-kinetic-scxml-interpreter
+skill_hardware_remapper:
+  ubuntu: ros-kinetic-skill-hardware-remapper
+skiros2:
+  ubuntu: ros-kinetic-skiros2
+skiros2_common:
+  ubuntu: ros-kinetic-skiros2-common
+skiros2_gui:
+  ubuntu: ros-kinetic-skiros2-gui
+skiros2_msgs:
+  ubuntu: ros-kinetic-skiros2-msgs
+skiros2_resource:
+  ubuntu: ros-kinetic-skiros2-resource
+skiros2_scalable_interface:
+  ubuntu: ros-kinetic-skiros2-scalable-interface
+skiros2_skill:
+  ubuntu: ros-kinetic-skiros2-skill
+skiros2_std_reasoners:
+  ubuntu: ros-kinetic-skiros2-std-reasoners
+skiros2_std_skills:
+  ubuntu: ros-kinetic-skiros2-std-skills
+skiros2_task:
+  ubuntu: ros-kinetic-skiros2-task
+skiros2_world_model:
+  ubuntu: ros-kinetic-skiros2-world-model
+sr_control:
+  ubuntu: ros-kinetic-sr-control
+sr_description:
+  ubuntu: ros-kinetic-sr-description
+sr_gazebo:
+  ubuntu: ros-kinetic-sr-gazebo
+sr_moveit:
+  ubuntu: ros-kinetic-sr-moveit
+task_manager:
+  ubuntu: ros-kinetic-task-manager
+task_manager_common:
+  ubuntu: ros-kinetic-task-manager-common
+task_manager_heart_beep:
+  ubuntu: ros-kinetic-task-manager-heart-beep
+task_manager_pseudo_pm:
+  ubuntu: ros-kinetic-task-manager-pseudo-pm
+task_manager_robot_map:
+  ubuntu: ros-kinetic-task-manager-robot-map
+task_manager_robot_profile:
+  ubuntu: ros-kinetic-task-manager-robot-profile
+task_manager_server:
+  ubuntu: ros-kinetic-task-manager-server
+vfk_msb_client:
+  ubuntu: ros-kinetic-vfk-msb-client
+wait_skill:
+  ubuntu: ros-kinetic-wait-skill
