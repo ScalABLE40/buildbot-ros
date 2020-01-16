@@ -8,6 +8,7 @@ cp /buildbot/buildbot.tac /buildbot/$WORKERNAME/buildbot.tac
 cp buildbot.tac buildbot.tac.bk
 #sed 's/umask = None/umask = 0o22/' buildbot.tac.bk > buildbot.tac
 # wait for db to start by trying to upgrade the master
-buildbot-worker restart $WORKERNAME
+sleep 100
+buildbot-worker start $WORKERNAME
 /usr/bin/dumb-init twistd --pidfile= -ny $WORKERNAME/buildbot.tac 
 tail -f /buildbot/$WORKERNAME/twistd.log

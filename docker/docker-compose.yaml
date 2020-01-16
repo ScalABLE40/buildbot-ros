@@ -1,7 +1,7 @@
 version: '3'
 volumes:
   deb_repository:
-  local_mirrors:
+  deb_docs:
 services:
   buildbot:
     container_name: buildbot_master
@@ -13,8 +13,10 @@ services:
     env_file:
       - db.env
     environment:
-      - BUILDBOT_WORKER_NAME=${BUILDBOT_WORKER_NAME}
-      - BUILDBOT_WORKER_PASS=${BUILDBOT_WORKER_PASS}
+      - BUILDBOT_WORKER_NAME_1=${BUILDBOT_WORKER_NAME_1}
+      - BUILDBOT_WORKER_PASS_1=${BUILDBOT_WORKER_PASS_1}
+      - BUILDBOT_WORKER_NAME_2=${BUILDBOT_WORKER_NAME_2}
+      - BUILDBOT_WORKER_PASS_2=${BUILDBOT_WORKER_PASS_2}
       - BUILDBOT_WEB_URL=${BUILDBOT_WEB_URL}
       - BUILDBOT_WEB_PORT=${BUILDBOT_WEB_PORT}
       - BUILDBOT_PRIVATE_INDEX=${BUILDBOT_PRIVATE_INDEX}
@@ -34,18 +36,18 @@ services:
     expose:
       - 5432
 
-  worker:
-    container_name: ${BUILDBOT_WORKER_NAME}
+  worker-1:
+    container_name: ${BUILDBOT_WORKER_NAME_1}
     build:
       context: .
       dockerfile: Dockerfile_bb_worker
-    image: buildbot-worker:0.0.3
+    image: buildbot-worker:latest
     command: bash /buildbot/start_worker.sh
     environment:
       BUILDMASTER: buildbot
       BUILDMASTER_PORT: ${BUILDBOT_WORKER_PORT}
-      WORKERNAME: ${BUILDBOT_WORKER_NAME}
-      WORKERPASS: ${BUILDBOT_WORKER_PASS}
+      WORKERNAME: ${BUILDBOT_WORKER_NAME_1}
+      WORKERPASS: ${BUILDBOT_WORKER_PASS_1}
       WORKER_ENVIRONMENT_BLACKLIST: DOCKER_BUILDBOT* BUILDBOT_ENV_* BUILDBOT_1* WORKER_ENVIRONMENT_BLACKLIST
       SINGING_KEY: ${SINGING_KEY}
       LOCAL_RESPOSITORY: ${LOCAL_RESPOSITORY}
@@ -53,3 +55,40 @@ services:
        - /var/run/docker.sock:/var/run/docker.sock
     links:
       - buildbot
+
+  worker-2:
+    container_name: ${BUILDBOT_WORKER_NAME_2}
+    build:
+      context: .
+      dockerfile: Dockerfile_bb_worker
+    image: buildbot-worker:latest
+    command: bash /buildbot/start_worker.sh
+    environment:
+      BUILDMASTER: buildbot
+      BUILDMASTER_PORT: ${BUILDBOT_WORKER_PORT}
+      WORKERNAME: ${BUILDBOT_WORKER_NAME_2}
+      WORKERPASS: ${BUILDBOT_WORKER_PASS_2}
+      WORKER_ENVIRONMENT_BLACKLIST: DOCKER_BUILDBOT* BUILDBOT_ENV_* BUILDBOT_1* WORKER_ENVIRONMENT_BLACKLIST
+      SINGING_KEY: ${SINGING_KEY}
+      LOCAL_RESPOSITORY: ${LOCAL_RESPOSITORY}
+    volumes:
+       - /var/run/docker.sock:/var/run/docker.sock
+    links:
+      - buildbot
+
+  scalable-repository:
+    container_name: local-repository
+    build:
+      args:
+        - YourOrganizationName=${YourOrganizationName}
+        - SIGNKEY=${GPG_SIGNKEY}
+        - KEY=${GPG_PATHWORD}
+      context: .
+      dockerfile: Dockerfile
+    image: ros-repository:latest
+    ports:
+      - "49160:22"
+      - "49161:80"
+    volumes:
+      - deb_repository:/home/package
+      - deb_docs:/var/www/building/

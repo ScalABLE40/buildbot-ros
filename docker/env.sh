@@ -11,3 +11,17 @@ export BUILDBOT_WORKER_PORT=9989
 export BUILDBOT_ROSINSTALL_INDEX=git@github.com:ipa-rwu/scalable_system_setup.git
 export LOCAL_RESPOSITORY=local-repository:80
 export SINGING_KEY=
+
+export DEVEL_TIME_H=2
+export DEVEL_TIME_M=59
+export DEVEL_TIME_H_D=3
+export DEVEL_TIME_M_D=30
+export DEB_TIME_H=4
+export DEB_TIME_M=30
+export DOC_TIME_H=5
+export DOC_TIME_M=30
+
+# local repository
+export YourOrganizationName=
+export GPG_SIGNKEY=${SINGING_KEY}
+export GPG_PATHWORD=
