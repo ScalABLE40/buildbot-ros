@@ -74,16 +74,42 @@ docker-compose --version
 
 ## Usage
 * Prepare and Publish a Signing Key for local repository
+
+Generate the master key
 ```
 gpg --gen-key
-gpg --edit-key 'pub 10E6133F', addkey, save
+```
+Choose RSA and RSA Key. Then you created a master key for signing. Make note of your signing key's ID (which is pub ...) for example, it is  10E6133F. We will need this in the next steps for creating another subkey for signing.
+```
+gpg --edit-key 'pub 10E6133F'
+```
+then type  
+```
+addkey
+```
+Then you need to choose RSA(sign only). You will get another key for signning, for example, it is A72DB3EF. Type "save" at the prompt.
+
+Detach Master Key From Subkey. Because we already create subkey we don't need the master key on our server. Now you need to detach master key from subkey. First we need to export the mater key and subkey. Then we can delete the keys from GPG's storage. Then re-import the subkey.
+
+First using the "--export-secret-key and --export" commands to export the whole key by using your master key.
+```
 gpg --export-secret-key 'pub 10E6133F' > private.key
 gpg --export 'pub 10E6133F' >> private.key 
-back up private key and rm private.key
+```
+back up private key and then 
+```
+rm private.key
+```
+Then export your public key and your subkey.
+```
 gpg --export 'pub 10E6133F' > public.key
 gpg --export-secret-subkeys 'sub A72DB3EF' > signing.key
+```
+Now you can delete your mater key.
+```
 gpg --delete-secret-key 'pub 10E6133F'
 ```
+
 * Save public.key and signing.key in folder "ros-repository-docker"
 * modify environment parameter in buildbot-ros/docker and ros-repository-docker
 * Run start.sh 
