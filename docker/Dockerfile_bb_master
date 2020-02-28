@@ -2,8 +2,8 @@ FROM ubuntu:18.04
 MAINTAINER Ruichao WU
 # If using a private distro, need to setup keys for github
 RUN mkdir -p /root/.ssh
-ADD ./docker/ssh_master/id_rsa /root/.ssh/id_rsa
-RUN chmod 600 /root/.ssh/id_rsa
+#ADD ./docker/ssh_master/id_rsa_worker.pub /root/.ssh/id_rsa_worker.pub
+#RUN chmod 600 /root/.ssh/id_rsa_worker.pub
 RUN apt-get update
 RUN apt-get install -y software-properties-common
 RUN add-apt-repository ppa:deadsnakes/ppa 
@@ -20,9 +20,10 @@ RUN apt-get install -q -y openssh-server \
     debhelper \
     debmirror
 # enter virtualenv
-RUN eval $(ssh-agent) && \
-    ssh-add /root/.ssh/id_rsa && \
-    ssh-keyscan -H github.com >> /etc/ssh/ssh_known_hosts 
+ARG SSH_KEY=123
+RUN echo "${SSH_KEY}" > /root/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_rsa
+RUN ssh-keyscan -H github.com >> /etc/ssh/ssh_known_hosts 
 #RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
 RUN apt-get update
 RUN /usr/bin/python3 -m venv /root/buildbot-env

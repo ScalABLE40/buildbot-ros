@@ -1,14 +1,14 @@
-version: '3'
-volumes:
-  deb_repository:
 services:
-  scalable-debian:
+  scalable:
     build:
       args:
-        SINGING_KEY: 
         LOCAL_RESPOSITORY: 172.17.0.1:49161
+        SINGING_KEY: 8617EB404586F58E
       context: .
       dockerfile: Dockerfile_deb
-    volumes:
-      - deb_repository:/home/package
     image: scalable-deb:latest
+    volumes:
+    - deb_repository:/home/package
+version: '3'
+volumes:
+  deb_repository: null

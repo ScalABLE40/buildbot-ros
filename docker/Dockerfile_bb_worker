@@ -8,8 +8,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # If using a private distro, need to setup keys for github
 RUN mkdir -p /root/.ssh
-ADD ./docker/ssh_worker/id_rsa /root/.ssh/id_rsa
-RUN chmod 600 /root/.ssh/id_rsa
+#ADD ./docker/ssh_worker/id_rsa_worker.pub /root/.ssh/id_rsa_worker.pub
+#RUN chmod 600 /root/.ssh/id_rsa_worker.pub
 # Install security updates and required packages
 RUN apt-get update && \
     apt-get -y upgrade && \
@@ -35,7 +35,7 @@ RUN apt-get update && \
     "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
     $(lsb_release -cs) \
     stable" && \
-    apt-get update && \
+    apt-get -y update && \
     apt-get -y upgrade && \
     apt-get -y install docker-ce 
 #system
@@ -56,9 +56,10 @@ RUN rm -rf /var/lib/apt/lists/* && \
     mkdir /buildbot &&\
     useradd -ms /bin/bash buildbot
 # ssh 
-RUN eval $(ssh-agent) && \
-    ssh-add /root/.ssh/id_rsa && \
-    ssh-keyscan -H github.com >> /etc/ssh/ssh_known_hosts 
+ARG SSH_KEY=123
+RUN echo "${SSH_KEY}" > /root/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_rsa
+RUN ssh-keyscan -H github.com >> /etc/ssh/ssh_known_hosts 
 RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
 RUN pip install buildbot-worker \
     setuptools-trial \

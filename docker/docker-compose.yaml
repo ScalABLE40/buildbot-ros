@@ -76,7 +76,7 @@ services:
     links:
       - buildbot
 
-  scalable-repository:
+  ros-repository:
     container_name: local-repository
     build:
       args:

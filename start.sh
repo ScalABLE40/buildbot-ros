@@ -1,4 +1,7 @@
 #!/bin/bash#
+
+# add arg
+#source $PWD/docker/env.sh
 # check OathToken exists
 OathToken="./secret_master/OathToken"
 if [ -f "$OathToken" ]
@@ -14,38 +17,6 @@ else
 $response 
 EOF
 	fi
-fi
-
-# check ssh key for mater
-ssh_master="./docker/ssh_master/id_rsa"
-if [ -f "$ssh_master" ]
-then
-	echo "SSH key for mater exists."
-else
-	echo "SSH key for mater doesn't exist."
-	read -r -p "Please enter your Email address for SSH-Key: " Emailadd
-	while [ -z "$Emailadd" ]; do
-		read -r -p "Please enter your Email address: " Emailadd
-	done
-	read -r -p "Please save you ssh in folder 'docker/ssh_master', don't give password for SSH-key, press any key to continue"
-	ssh-keygen -t rsa -b 4096 -C $Emailadd
-	eval "$(ssh-agent -s)"
-	ssh-add $PWD"/docker/ssh_master/id_rsa"
-	read -r -p "Please put id_rsa.pub for mater in your github" 
-fi
-
-# check ssh key for worker
-ssh_master="./docker/ssh_worker/id_rsa"
-if [ -f "$ssh_master" ]
-then
-	echo "SSH key for worker exists."
-else
-	echo "SSH key for worker doesn't exist."
-	read -r -p "Please save you ssh in folder 'docker/ssh_worker', don't give password for SSH-key, press any key to continue"
-	ssh-keygen -t rsa -b 4096 -C $Emailadd
-	eval "$(ssh-agent -s)"
-	ssh-add $PWD"/docker/ssh_master/id_rsa"
-	read -r -p "Please put id_rsa.pub for worker in your github" 
 fi
 
 # check gpg key in folder ros-repository-docker
@@ -67,17 +38,16 @@ python edit-compose.py $PWD/buildbot-ros/docker_components/docker-compose-deb.ya
 python edit-compose.py $PWD/buildbot-ros/docker_components/docker-compose-test.yaml $Signing_key
 python edit-compose.py $PWD/buildbot-ros/docker_components/docker-compose-sys.yaml $Signing_key
 
+
 # crate docker image for buildbot master
-docker build -f docker/Dockerfile_bb_master -t buildbot-ros:latest .
+docker build -f docker/Dockerfile_bb_master -t buildbot-ros:latest --build-arg SSH_KEY="$(cat $HOME/.ssh/id_rsa)" .
 # crate docker image for buildbot worker
-docker build -f docker/Dockerfile_bb_worker -t buildbot-worker:latest .
+docker build -f docker/Dockerfile_bb_worker -t buildbot-worker:latest --build-arg SSH_KEY="$(cat $HOME/.ssh/id_rsa)" .
 
 # add arg
-source $PWD/buildbot-ros/docker/env.sh
+source $PWD/docker/env.sh
 source $PWD/ros-repository-docker/env.sh
 # create local repository image
 docker-compose -f ros-repository-docker/docker-compose.yaml build
-docker-compose -f ros-repository-docker/docker-compose.yaml up
-
-#start master worker db
+# start all 
 docker-compose -f docker/docker-compose.yaml up

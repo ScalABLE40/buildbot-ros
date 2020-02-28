@@ -49,7 +49,9 @@ RUN echo "root:docker" | chpasswd
 RUN passwd -d root 
 
 # add rospdep to /home/package to share
-RUN apt-get install -y python-pip
+RUN apt-get -y update && \
+    apt-get -y upgrade
+RUN apt install -y python-pip
 RUN pip install --upgrade pip  
 RUN pip install pyyaml 
 RUN mkdir -p /home/package

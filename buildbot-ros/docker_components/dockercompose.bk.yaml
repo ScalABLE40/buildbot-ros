@@ -1,0 +1,10 @@
+version: '3'
+services:
+  scalable-test:
+    build:
+      args:
+      - GITHUB_TOKEN=4d8eea8b41fc32ea6e1ee2a7cd4846a7afb5e5bc
+      - USERNAME=ipa-rwu
+      context: .
+      dockerfile:
+    image: scalable-unique:0.0.2

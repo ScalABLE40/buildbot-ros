@@ -111,7 +111,11 @@ gpg --delete-secret-key 'pub 10E6133F'
 ```
 
 * Save public.key and signing.key in folder "ros-repository-docker"
+* Add your OathToken from github to `buildbot-ros-docker/buildbot-ros/secret/OathToken` file
 * modify environment parameter in buildbot-ros/docker and ros-repository-docker
+	* Edit ros-repository-docker/env.sh file
+	* Edit docker/env.sh 
+* buildbot need to access your github repository. So it will add your ssh in its running environment. You can find it is defined in start.sh. Make sure the path of ssh key is right.
 * Run start.sh 
 ```
 sh start.sh

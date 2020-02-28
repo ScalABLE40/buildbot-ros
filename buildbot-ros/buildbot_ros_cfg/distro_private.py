@@ -27,6 +27,6 @@ def get_private_index(url, branch = None):
         call(['git', 'clone', '--single-branch', '-b', branch, url, '/tmp/rosdistro'])
     else:
         call(['git', 'clone', '--single-branch', url, '/tmp/rosdistro'])
-#    return get_index( 'file:///tmp/rosdistro/index.yaml' )
-    return get_index( 'file:///root/rosdistro/index.yaml' )
+    return get_index( 'file:///tmp/rosdistro/index.yaml' )
+#    return get_index( 'file:///root/rosdistro/index.yaml' )
 

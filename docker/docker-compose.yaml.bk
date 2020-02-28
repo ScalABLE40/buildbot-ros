@@ -1,0 +1,52 @@
+version: '3'
+volumes:
+  deb_repository:
+  local_mirrors:
+services:
+  buildbot:
+    container_name: buildbot_master
+    build:
+      context: .
+      dockerfile: Dockerfile_bb_master
+    image: buildbot-ros:0.0.6
+    command: bash /root/start_master.sh
+    env_file:
+      - db.env
+    environment:
+      - BUILDBOT_WORKER_NAME=worker-1
+      - BUILDBOT_WORKER_PASS=1106
+      - BUILDBOT_WEB_URL=http://localhost:8010/
+      - BUILDBOT_WEB_PORT=tcp:port=8010
+      - BUILDBOT_PRIVATE_INDEX=git@github.com:ipa-rwu/rosdistro-scalable.git
+      - BUILDBOT_WORKER_PORT=9989
+      - BUILDBOT_ROSINSTALL_INDEX=git@github.com:ipa-rwu/scalable_system_setup.git
+    links:
+      - db
+    depends_on:
+      - db
+    ports:
+      - "8010:8010"
+  db:
+    env_file:
+      - db.env
+    image: "postgres:9.4"
+    expose:
+      - 5432
+
+  worker:
+    container_name: worker-1
+    build:
+      context: .
+      dockerfile: Dockerfile_bb_worker
+    image: buildbot-worker:0.0.3
+    command: bash /buildbot/start_worker.sh
+    environment:
+      BUILDMASTER: buildbot
+      BUILDMASTER_PORT: 9989
+      WORKERNAME: worker-1
+      WORKERPASS: 1106
+      WORKER_ENVIRONMENT_BLACKLIST: DOCKER_BUILDBOT* BUILDBOT_ENV_* BUILDBOT_1* WORKER_ENVIRONMENT_BLACKLIST
+    volumes:
+       - /var/run/docker.sock:/var/run/docker.sock
+    links:
+      - buildbot

@@ -1,9 +1,9 @@
 services:
-  scalable-debian:
+  scalable:
     build:
       args:
         LOCAL_RESPOSITORY: 172.17.0.1:49161
-        SINGING_KEY: 
+        SINGING_KEY: 8617EB404586F58E
       context: .
       dockerfile: Dockerfile_sys
     image: scalable-sys:latest

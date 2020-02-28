@@ -1,0 +1,28 @@
+%YAML 1.1
+# ROS distribution file
+# see REP 141: http://ros.org/reps/rep-0141.html
+---
+release_platforms:
+  ubuntu:
+  - xenial
+repositories:
+  ur5e_egp50:
+    doc:
+      type: git
+      url: git@github.com:ipa-rwu/ur5e_egp50.git
+      version: kogrob
+    release:
+      packages:
+      - ur5e_egp50_moveit_config
+      - ur5e_egp50_description
+      tags:
+        release: release/melodic/{package}/{version}
+      url: git@github.com:ipa-rwu/ur5e_egp50.git
+      version: 1.2.5
+    source:
+      type: git
+      url: git@github.com:ipa-rwu/ur5e_egp50.git
+      version: kogrob
+    status: developed
+type: distribution
+version: 1
