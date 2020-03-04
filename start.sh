@@ -3,11 +3,13 @@
 # add arg
 #source $PWD/docker/env.sh
 # check OathToken exists
-OathToken="./secret_master/OathToken"
+OathToken="./buildbot-ros/secret/OathToken"
 if [ -f "$OathToken" ]
 then
 	echo "OathToken exists."
 else
+	mkdir $PWD/buildbot-ros/secret/
+	touch $PWD/buildbot-ros/secret/OathToken
 	read -r -p "Please enter your OathToken: " response
 	if [ -z "$response" ]
 	then 
