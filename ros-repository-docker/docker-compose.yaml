@@ -1,0 +1,27 @@
+version: '3'
+volumes:
+  deb_repository:
+  local_mirrors:
+services:
+  scalable-repository:
+    container_name: local-repository
+    build:
+      args:
+      - YourOrganizationName=${YourOrganizationName}
+      - SIGNKEY=${GPG_SIGNKEY}
+      - KEY=${GPG_PATHWORD}
+      context: .
+      dockerfile: Dockerfile
+    image: ros-repository:latest
+    ports:
+      - "49160:22"
+      - "49161:80"
+    volumes:
+      - deb_repository:/home/package
+      - local_mirrors:/var/www/building/ubuntu
+#    command: 
+#      - /bin/bash
+#      - -c
+#      - |
+#        /usr/local/sbin/start 
+#        service nginx start
