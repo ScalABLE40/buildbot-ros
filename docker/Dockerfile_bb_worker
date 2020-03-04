@@ -1,0 +1,79 @@
+# buildbot-worker
+FROM        ubuntu:16.04
+MAINTAINER  Ruichao WU
+ENV TZ=Europe/Berlin
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# This will make apt-get install without question
+#ARG         DEBIAN_FRONTEND=noninteractive
+
+# If using a private distro, need to setup keys for github
+RUN mkdir -p /root/.ssh
+#ADD ./docker/ssh_worker/id_rsa_worker.pub /root/.ssh/id_rsa_worker.pub
+#RUN chmod 600 /root/.ssh/id_rsa_worker.pub
+# Install security updates and required packages
+RUN apt-get update && \
+    apt-get -y upgrade && \
+    apt-get -y install -q \
+    apt-utils \
+    build-essential \
+    git \
+    subversion \
+    python-dev \
+    libffi-dev \
+    libssl-dev \
+    python-setuptools \
+    python-pip \
+    openssh-server \
+    #install docker
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg2 \
+    software-properties-common && \
+    curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg > /tmp/dkey; apt-key add /tmp/dkey && \
+    add-apt-repository \
+    "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
+    $(lsb_release -cs) \
+    stable" && \
+    apt-get -y update && \
+    apt-get -y upgrade && \
+    apt-get -y install docker-ce 
+#system
+RUN echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list && \
+    apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654 && \
+    apt-get update && \
+    apt-get install -y python-wstool \
+    #ros-kinetic-catkin \
+    python-catkin-tools 
+# dumb-init
+RUN wget https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64.deb
+RUN dpkg -i dumb-init_*.deb
+RUN pip install --upgrade pip  
+RUN rm -rf /var/lib/apt/lists/* && \
+    # Install required python packages, and twisted
+    pip --no-cache-dir install 'twisted[tls]' && \
+    pip install virtualenv && \
+    mkdir /buildbot &&\
+    useradd -ms /bin/bash buildbot
+# ssh 
+ARG SSH_KEY=123
+RUN echo "${SSH_KEY}" > /root/.ssh/id_rsa
+RUN chmod 600 /root/.ssh/id_rsa
+RUN ssh-keyscan -H github.com >> /etc/ssh/ssh_known_hosts 
+RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
+RUN pip install buildbot-worker \
+    setuptools-trial \
+    configparser \
+    pathlib \
+    docker-compose \
+    pyyaml
+RUN chown -R buildbot /buildbot
+# docker login 
+RUN mkdir -p /root/.docker
+ADD ./docker/docker_auth.json /root/.docker/config.json
+#USER buildbot
+WORKDIR /buildbot
+COPY docker/buildbot_worker.tac buildbot.tac 
+ADD docker/start_worker.sh /buildbot/start_worker.sh
+
+#CMD ["/usr/bin/dumb-init", "twistd", "--pidfile=", "-ny", "buildbot.tac"]
