@@ -1,0 +1,18 @@
+From ros:kinetic-ros-core-xenial
+RUN apt-get update && apt-get install -y \
+   	ros-kinetic-ros-base \
+	git \
+	dpkg-dev \
+	debhelper \
+	fakeroot \
+	python-pip \
+	software-properties-common\
+	reprepro \
+	apt-utils
+RUN pip install --upgrade pip
+RUN pip install -U bloom
+ADD ./scripts/update_private_rosdep.py /home/rosdep/update_private_rosdep.py
+RUN apt-get -y update
+RUN apt-get -y upgrade
+ADD ./shell/builddebian.sh /usr/local/sbin/builddeb.sh
+RUN rosdep db

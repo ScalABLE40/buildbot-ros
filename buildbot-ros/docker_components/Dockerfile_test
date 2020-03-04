@@ -1,0 +1,8 @@
+From registry.msb.scalable.atm.virtualfortknox.de/buildbot_scalable/buildbot-test:base
+# local repository gpg key
+ARG SINGING_KEY
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $SINGING_KEY
+# add local repository
+ARG LOCAL_RESPOSITORY
+RUN sh -c 'echo "deb http://$LOCAL_RESPOSITORY/ xenial main" >> /etc/apt/sources.list'
+RUN apt-get update

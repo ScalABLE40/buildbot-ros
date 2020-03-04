@@ -1,0 +1,27 @@
+From ros:kinetic-ros-core-xenial
+
+RUN apt-get update && apt-get install -y \
+   	ros-kinetic-ros-base \
+	git \
+	apt-transport-https -y
+ #  	&& rm -rf /var/lib/apt/lists/*
+RUN sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ trusty main" > /etc/apt/sources.list.d/dotnetdev.list'
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893
+RUN apt-get update
+
+#oauth
+ARG GITHUB_TOKEN
+ARG USERNAME
+
+RUN mv /bin/sh /bin/sh_tmp && ln -s /bin/bash /bin/sh
+RUN mkdir -p /opt/catkin_ws/src \
+	&& cd /opt/catkin_ws \
+	&& source /opt/ros/kinetic/setup.bash \
+	&& /opt/ros/kinetic/bin/catkin_init_workspace src \
+#	&& apt-get install -y ros-kinetic-ur-gazebo \
+#       ros-kinetic-ur5-moveit-config  \
+#      ros-kinetic-ur-kinematics  \
+#	ros-kinetic-universal-robot && \
+	&& git clone https://$USERNAME:$GITHUB_TOKEN@github.com/ScalABLE40/iiwa_stack.git
+
+#apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B02C46DF417A0893

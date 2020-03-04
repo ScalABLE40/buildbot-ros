@@ -1,0 +1,8 @@
+From registry.msb.scalable.atm.virtualfortknox.de/buildbot_scalable/buildbot-deb:0.0.2
+# local repository
+ARG SINGING_KEY
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $SINGING_KEY
+#ARG LOCAL_URL
+#RUN sh -c 'echo "deb http://$LOCAL_URL/ xenial main" >> /etc/apt/sources.list'
+COPY ./build /tmp/
+RUN apt-get update
