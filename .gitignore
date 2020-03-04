@@ -51,7 +51,7 @@ qtcreator-*
 /ros-repository-docker/public.key
 /ros-repository-docker/signing.key
 
-/secret_master/OathToken
+/buildbot-ros/secret/OathToken
 
 # Catkin custom files
 CATKIN_IGNORE
