@@ -1,24 +1,41 @@
-#!/bin/bash#
+#!/bin/bash
+
+trap "exit 1" TERM
+export TOP_PID=$$
 
 # add arg
 #source $PWD/docker/env.sh
 # check OathToken exists
-OathToken="./buildbot-ros/secret/OathToken"
+
+function create_oathtoken() {
+	local OathToken="./secret_master/OathToken"
+	read -r -p "Please enter your OathToken: ('n' = Cancel) " response
+	if [ ! -z "$response" ]
+	then
+		if [ $response == "n" ]
+		then
+			kill -s TERM $TOP_PID
+		else
+			echo "$response" > $OathToken
+			echo "OathToken file created('$OathToken')" > /dev/tty
+			return 1;
+		fi
+	fi
+	return 0;
+}
+
+
+
+OathToken="./secret_master/OathToken"
+oath_token_created=0;
 if [ -f "$OathToken" ]
 then
 	echo "OathToken exists."
 else
-	mkdir $PWD/buildbot-ros/secret/
-	touch $PWD/buildbot-ros/secret/OathToken
-	read -r -p "Please enter your OathToken: " response
-	if [ -z "$response" ]
-	then 
-		read -r -p "Please enter your OathToken: " response
-	else
-	cat > $OathToken << EOF
-$response 
-EOF
-	fi
+	while [ "$oath_token_created" == 0 ];
+	do
+		oath_token_created="$(create_oathtoken)"
+	done
 fi
 
 # check gpg key in folder ros-repository-docker
@@ -47,8 +64,8 @@ docker build -f docker/Dockerfile_bb_master -t buildbot-ros:latest --build-arg S
 docker build -f docker/Dockerfile_bb_worker -t buildbot-worker:latest --build-arg SSH_KEY="$(cat $HOME/.ssh/id_rsa)" .
 
 # add arg
-source $PWD/docker/env.sh
-source $PWD/ros-repository-docker/env.sh
+. $PWD/docker/env.sh
+. $PWD/ros-repository-docker/env.sh
 # create local repository image
 docker-compose -f ros-repository-docker/docker-compose.yaml build
 # start all 
